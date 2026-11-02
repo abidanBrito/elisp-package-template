@@ -1,0 +1,6 @@
+# Build artifacts
+/your-package-autoloads.el
+*.elc
+
+# Local package directory (dev & test dependencies)
+/.local-elpa/
