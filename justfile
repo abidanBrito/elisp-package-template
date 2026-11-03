@@ -1,7 +1,13 @@
 pkg := "your-package"
 
 emacs := env_var_or_default("EMACS", "emacs")
-batch := emacs + " -Q --batch -L . -L test"
+elpa-dir  := justfile_directory() / ".local-elpa"
+
+tools := "package-lint relint"
+pkg-init := "(progn (setq package-user-dir \"" + elpa-dir + "\") (require (quote package)) (add-to-list (quote package-archives) (cons \"melpa\" \"https://melpa.org/packages/\") t) (package-pkg-initialize))"
+
+batch  := emacs + " -Q --batch -L . -L test"
+ebatch := batch + " --eval '" + pkg-init + "'"
 
 source-files := `find . -maxdepth 1 -name '*.el' ! -name '*-autoloads.el' ! -name '.dir-locals.el' | sort | tr '\n' ' '`
 test-files   := `find test -maxdepth 1 -name '*.el' 2>/dev/null | sort | tr '\n' ' '`
@@ -26,9 +32,29 @@ autoloads:
     (make-directory-autoloads default-directory out)) \
     (t (message \"Skipping autoloads: unsupported Emacs version\"))))"
 
+# Lint against MELPA rules
+lint: _tools
+    @{{ebatch}} --eval "(setq package-lint-main-file \"{{pkg}}.el\")" \
+    -f package-lint-batch-and-exit {{source-files}}
+
+# Check regular expressions and docstring escapes
+relint: _tools
+    @{{ebatch}} -l relint -f relint-batch {{source-files}} {{test-files}}
+
+# Install lint tooling
+_tools:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    stamp="{{elpa-dir}}/.tools-installed"
+    if [ -f "$stamp" ]; then exit 0; fi
+    {{ebatch}} --eval '(package-refresh-contents)' \
+    --eval '(dolist (p (quote ({{tools}}))) (unless (package-installed-p p) (package-install p)))'
+    touch "$stamp"
+
 # Remove all build artifacts
 clean:
     @rm -f ./*.elc {{pkg}}-autoloads.el
+    @rm -rf {{elpa-dir}}
 
 # Run the test suite
 test:
@@ -56,4 +82,4 @@ rename name:
     | xargs -0 -r sedi "s/$old_name/$new_name/g; s/elisp-package-template/$new_name/g"
     sedi '/^# >>> template-rename >>>/,/^# <<< template-rename <<<$/d' justfile
     echo "Renamed to '$new_name'.  Review the diff, then commit."
-# <<< template-rename <<<
+    # <<< template-rename <<<
