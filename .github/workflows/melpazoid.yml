@@ -1,0 +1,31 @@
+name: Melpazoid
+
+on: [push, pull_request, workflow_dispatch]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  melpazoid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1         # v7.0.1
+        
+      - name: Set up Python 3.x
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0     # v7.1.0
+        with: { python-version: '3.x' }
+
+      - name: Install melpazoid
+        run: |
+          sudo apt-get install emacs && emacs --version
+          git clone --depth 1 https://github.com/riscy/melpazoid.git ~/melpazoid
+
+      - name: Run melpazoid
+        env:
+          LOCAL_REPO: ${{ github.workspace }}
+          RECIPE: (your-package :fetcher github :repo "abidanBrito/your-package")
+          EXIST_OK: true
+          WARN_IS_ERROR: false
+        run: make -C ~/melpazoid
