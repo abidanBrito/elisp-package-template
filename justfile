@@ -15,6 +15,9 @@ test-files   := `find test -maxdepth 1 -name '*.el' 2>/dev/null | sort | tr '\n'
 @_default:
     just --list
 
+# Run every check, like CI does
+all: build test lint relint
+
 # Build everything
 build: compile autoloads
 
@@ -83,4 +86,4 @@ rename name:
     done < <(grep -rlZ --exclude-dir=.git --exclude-dir=.local-elpa -e "$old_name" .)
     sedi '/^# >>> template-rename >>>/,/^# <<< template-rename <<<$/d' justfile
     echo "Renamed to '$new_name'.  Review the diff, then commit."
-    # <<< template-rename <<<
+# <<< template-rename <<<
