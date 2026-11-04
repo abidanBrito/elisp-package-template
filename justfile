@@ -4,7 +4,7 @@ emacs := env_var_or_default("EMACS", "emacs")
 elpa-dir  := justfile_directory() / ".local-elpa"
 
 tools := "package-lint relint"
-pkg-init := "(progn (setq package-user-dir \"" + elpa-dir + "\") (require (quote package)) (add-to-list (quote package-archives) (cons \"melpa\" \"https://melpa.org/packages/\") t) (package-pkg-initialize))"
+pkg-init := "(progn (setq package-user-dir \"" + elpa-dir + "\") (require (quote package)) (add-to-list (quote package-archives) (cons \"melpa\" \"https://melpa.org/packages/\") t) (package-initialize))"
 
 batch  := emacs + " -Q --batch -L . -L test"
 ebatch := batch + " --eval '" + pkg-init + "'"
