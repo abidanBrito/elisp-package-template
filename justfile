@@ -78,8 +78,9 @@ rename name:
     fi
     git mv "$old_name.el" "$new_name.el"
     if [ -f "test/$old_name-test.el" ]; then git mv "test/$old_name-test.el" "test/$new_name-test.el"; fi
-    grep -rlZ --exclude-dir=.git --exclude-dir=.local-elpa -e "$old_name" -e "elisp-package-template" . \
-    | xargs -0 -r sedi "s/$old_name/$new_name/g; s/elisp-package-template/$new_name/g"
+    while IFS= read -r -d '' file; do
+        sedi "s/$old_name/$new_name/g; s/elisp-package-template/$new_name/g" "$file"
+    done < <(grep -rlZ --exclude-dir=.git --exclude-dir=.local-elpa -e "$old_name" -e "elisp-package-template" .)
     sedi '/^# >>> template-rename >>>/,/^# <<< template-rename <<<$/d' justfile
     echo "Renamed to '$new_name'.  Review the diff, then commit."
     # <<< template-rename <<<
