@@ -1,5 +1,5 @@
 # Build artifacts
-/your-package-autoloads.el
+/elisp-package-template-autoloads.el
 *.elc
 
 # Local package directory (dev & test dependencies)

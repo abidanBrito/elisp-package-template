@@ -1,4 +1,4 @@
-pkg := "your-package"
+pkg := "elisp-package-template"
 
 emacs := env_var_or_default("EMACS", "emacs")
 elpa-dir  := justfile_directory() / ".local-elpa"
@@ -65,12 +65,12 @@ test:
     {{batch}} $load -f ert-run-tests-batch-and-exit
 
 # >>> template-rename >>>
-# Rename the template: rename your-package-name
+# Rename the template, e.g.: just rename my-package
 # NOTE(abi): this recipe deletes itself once you run it.
 rename name:
     #!/usr/bin/env bash
     set -euo pipefail
-    old_name="your-package"
+    old_name="elisp-package-template"
     new_name="{{name}}"
     [[ "$new_name" =~ ^[a-z][a-z0-9-]*$ ]] || { echo "name must be lowercase letters, digits and hyphens" >&2; exit 1; }
     if [[ "$OSTYPE" == "darwin"* ]]; then sedi() { sed -i '' "$@"; }
@@ -79,8 +79,8 @@ rename name:
     git mv "$old_name.el" "$new_name.el"
     if [ -f "test/$old_name-test.el" ]; then git mv "test/$old_name-test.el" "test/$new_name-test.el"; fi
     while IFS= read -r -d '' file; do
-        sedi "s/$old_name/$new_name/g; s/elisp-package-template/$new_name/g" "$file"
-    done < <(grep -rlZ --exclude-dir=.git --exclude-dir=.local-elpa -e "$old_name" -e "elisp-package-template" .)
+        sedi "s/$old_name/$new_name/g" "$file"
+    done < <(grep -rlZ --exclude-dir=.git --exclude-dir=.local-elpa -e "$old_name" .)
     sedi '/^# >>> template-rename >>>/,/^# <<< template-rename <<<$/d' justfile
     echo "Renamed to '$new_name'.  Review the diff, then commit."
     # <<< template-rename <<<

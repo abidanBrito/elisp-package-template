@@ -1,4 +1,4 @@
-;;; your-package.el --- Short package description -*- lexical-binding: t; -*-
+;;; elisp-package-template.el --- Short package description -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 Abidán Brito
 
@@ -19,20 +19,20 @@
 
 ;;; Code:
 
-(defgroup your-package nil
+(defgroup elisp-package-template nil
   "Short package description."
   :group 'tools
-  :prefix "your-package-")
+  :prefix "elisp-package-template-")
 
 ;; TODO: add your package's options here with `defcustom'.
 
 ;;;###autoload
-(define-minor-mode your-package-mode
-  "Toggle `your-package-mode'."
+(define-minor-mode elisp-package-template-mode
+  "Toggle `elisp-package-template-mode'."
   :global t
-  (if your-package-mode
-      (message "your-package enabled")
-    (message "your-package disabled")))
+  (if elisp-package-template-mode
+      (message "elisp-package-template enabled")
+    (message "elisp-package-template disabled")))
 
-(provide 'your-package)
-;;; your-package.el ends here
+(provide 'elisp-package-template)
+;;; elisp-package-template.el ends here
