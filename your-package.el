@@ -6,7 +6,7 @@
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: tools
-;; URL: https://github.com/abidanBrito/your-package
+;; URL: https://github.com/abidanBrito/elisp-package-template
 ;; SPDX-License-Identifier: MIT
 
 ;;; Commentary:
