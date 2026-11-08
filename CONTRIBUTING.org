@@ -7,9 +7,9 @@ This document describes how to contribute to =elisp-package-template= and what i
 
 1. *Open an issue first* for anything non-trivial. Do not send a feature out of the blue (simple fixes are exempt, see below).
 2. Agree on the design in that thread.
-3. Fork, branch off =develop=, implement and *test* your change.
+3. Fork, branch off =main=, implement and *test* your change.
 4. Make sure it byte-compiles and lints cleanly.
-5. Open a pull request against =develop=, linking back to the issue in question (if it applies).
+5. Open a pull request against =main=, linking back to the issue in question (if it applies).
 
 * Open an issue before a pull request
 
@@ -36,13 +36,12 @@ You do not have to type everything yourself, but you should understand and stand
 
 You will need GNU Emacs 27.1 or newer, [[https://github.com/casey/just][just]], and optionally [[https://pre-commit.com/][pre-commit]].
 
-Clone your fork and create a branch off =develop=:
+Clone your fork and create a branch off =main=. Prefix the branch with its type, e.g. =feature/=, =fix/= or =docs/=:
 
 #+begin_src sh
   git clone https://github.com/abidanBrito/elisp-package-template.git
   cd elisp-package-template
-  git checkout develop
-  git checkout -b my-branch
+  git checkout -b feature/my-change
 #+end_src
 
 The =justfile= bundles the common tasks. You may run =just= on its own to list them.
@@ -84,7 +83,7 @@ Add or update tests under =test/= for any behaviour you change, and run =just te
 - Whenever possible, keep commits atomic; focused on a single logical change.
 
 #+begin_quote
-*Note:* both =main= and =develop= are protected, so all changes land through a reviewed pull request. Fill in the template and tick the checklist honestly.
+*Note:* =main= should be protected so all changes land through a reviewed pull request. If you instantiated this template, enable it under Settings → Branches (or with a ruleset). Fill in the template and tick the checklist honestly.
 #+end_quote
 
 Thanks for contributing to =elisp-package-template=!
