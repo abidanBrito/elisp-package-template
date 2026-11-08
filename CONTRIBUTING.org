@@ -1,0 +1,90 @@
+#+title: Contributing to elisp-package-template
+#+author: Abidán Brito
+
+This document describes how to contribute to =elisp-package-template= and what is expected of a change before it can be merged. Please read it before opening an issue or a pull request.
+
+* TLDR
+
+1. *Open an issue first* for anything non-trivial. Do not send a feature out of the blue (simple fixes are exempt, see below).
+2. Agree on the design in that thread.
+3. Fork, branch off =develop=, implement and *test* your change.
+4. Make sure it byte-compiles and lints cleanly.
+5. Open a pull request against =develop=, linking back to the issue in question (if it applies).
+
+* Open an issue before a pull request
+
+Please, for anything touching behaviour or API design, start with an issue. This is not bureaucracy for its own sake; it lets us settle design and style questions up front, so nobody spends time on a patch or a feature only to have it turned down over something that could have been sorted out in a couple of comments.
+
+- *Bugs*: open a bug report.
+- *Features / ideas*: open a feature request.
+
+*Trivial changes are exempt.* Typos, documentation fixes and obvious few-line bug fixes can go straight to a pull request. When in doubt, open an issue first.
+
+Feature or design-related pull requests not backed by an accepted issue may be closed and redirected to one. Do not take it personally, it just keeps the project's development coherent.
+
+* On AI-Assisted work
+
+Using AI tools to help write code is fine. What is *not* fine is letting a model think, commit or speak on your behalf.
+
+- *Commit messages* should mostly be written by hand.
+- *In-code comments* should explain why the code does what it does, not restate the obvious.
+- *Issue and pull request descriptions* must be written by you, in your own words. If a maintainer is to have a conversation, it should be with you, not an LLM.
+
+You do not have to type everything yourself, but you should understand and stand behind every line you submit. As a rule of thumb, if you cannot explain or vouch for something, do not include it.
+
+* Development setup
+
+You will need GNU Emacs 27.1 or newer, [[https://github.com/casey/just][just]], and optionally [[https://pre-commit.com/][pre-commit]].
+
+Clone your fork and create a branch off =develop=:
+
+#+begin_src sh
+  git clone https://github.com/abidanBrito/elisp-package-template.git
+  cd elisp-package-template
+  git checkout develop
+  git checkout -b my-branch
+#+end_src
+
+The =justfile= bundles the common tasks. You may run =just= on its own to list them.
+
+Before pushing, your change should pass at least:
+
+#+begin_src sh
+  just build
+  just lint
+  just relint
+  just test
+#+end_src
+
+#+begin_quote
+*Note:* the first run installs the lint and test dependencies into a local =.local-elpa/= directory, so a fresh checkout needs nothing but Emacs and =just=.
+#+end_quote
+
+Installing the =pre-commit= hooks wires both the commit-time and push-time checks:
+
+#+begin_src sh
+  pre-commit install
+#+end_src
+
+* Coding style
+
+- Whenever possible, follow the conventions already present in the codebase.
+- Keep the implementation small and straightforward.
+- Public symbols are prefixed with =elisp-package-template-= and internal ones with =elisp-package-template--=.
+- All files use =lexical-binding=.
+
+* Testing
+
+Add or update tests under =test/= for any behaviour you change, and run =just test=. For changes that are hard to cover automatically, do test them manually starting from =emacs -Q= with a minimal config.
+
+* Commit history
+
+- Use the prefixes defined by the [[https://www.conventionalcommits.org/][Conventional Commits]] specification.
+- Use the imperative mood and a short, lower-case summary line, e.g. =fix: handle empty buffer=.
+- Whenever possible, keep commits atomic; focused on a single logical change.
+
+#+begin_quote
+*Note:* both =main= and =develop= are protected, so all changes land through a reviewed pull request. Fill in the template and tick the checklist honestly.
+#+end_quote
+
+Thanks for contributing to =elisp-package-template=!
