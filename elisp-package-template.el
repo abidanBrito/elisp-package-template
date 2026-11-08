@@ -11,11 +11,14 @@
 
 ;;; Commentary:
 
-;; TODO: describe what this package does and how to start using it.
-;;       What you write here is what `describe-package' shows.
-;;
-;; TODO: set the `Keywords' header above (run `finder-list-keywords'
-;;       to see all valid options to choose from).
+;; Describe what this package does and how to start using it.
+;; What you write here is what `describe-package' shows.
+
+;;; TODO:
+
+;; - Write the `Commentary' section above.
+;; - Set the `Keywords' header (run `finder-list-keywords' to see all
+;;   valid options to choose from).
 
 ;;; Code:
 
