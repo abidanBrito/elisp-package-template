@@ -1,5 +1,7 @@
 # Run `pre-commit install` once to register the git hooks
 
+default_install_hook_types: [pre-commit, pre-push]
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
@@ -19,3 +21,29 @@ repos:
       - id: elisp-indent
       - id: elisp-checkdoc
       - id: elisp-check-declare
+
+  - repo: local
+    hooks:
+      - id: lint
+        name: package-lint
+        entry: just lint
+        language: system
+        files: \.el$
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: relint
+        name: relint
+        entry: just relint
+        language: system
+        files: \.el$
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: test
+        name: ert tests
+        entry: just test
+        language: system
+        files: \.el$
+        pass_filenames: false
+        stages: [pre-push]
