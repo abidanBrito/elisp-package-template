@@ -79,7 +79,7 @@ With =use-package=:
 (use-package elisp-package-template
   :load-path "~/path/to/elisp-package-template"
   :config
-  (elisp-package-template 1))
+  (elisp-package-template-mode 1))
 #+end_src
 
 Or without it:
