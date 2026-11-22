@@ -16,7 +16,7 @@ test-files   := `find test -maxdepth 1 -name '*.el' 2>/dev/null | sort | tr '\n'
     just --list
 
 # Run every check, like CI does
-all: build test lint relint
+all: build test checkdoc check-declare lint relint
 
 # Build everything
 build: compile autoloads
@@ -34,6 +34,27 @@ autoloads:
     ((fboundp 'make-directory-autoloads) \
     (make-directory-autoloads default-directory out)) \
     (t (message \"Skipping autoloads: unsupported Emacs version\"))))"
+
+# Check docstrings against Emacs conventions
+checkdoc:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    out=$({{batch}} --eval "(progn (require 'checkdoc) \
+    (setq checkdoc-verb-check-experimental-flag nil) \
+    (dolist (f command-line-args-left) (checkdoc-file f)))" {{source-files}} {{test-files}} 2>&1 || true)
+    if [ -n "$out" ]; then printf '%s\n' "$out"; exit 1; fi
+
+# Verify every declare-function call
+check-declare:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{batch}} --eval "(progn (require 'check-declare) \
+    (dolist (f command-line-args-left) (check-declare-file f)) \
+    (let ((buf (get-buffer check-declare-warning-buffer))) \
+    (when (and buf (with-current-buffer buf \
+    (string-match-p \"[^ \t\n\f]\" (buffer-string)))) \
+    (princ (with-current-buffer buf (buffer-string))) \
+    (kill-emacs 1))))" {{source-files}} {{test-files}} 2>/dev/null
 
 # Lint against MELPA rules
 lint: _tools
