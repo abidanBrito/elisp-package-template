@@ -28,5 +28,5 @@ jobs:
           LOCAL_REPO: ${{ github.workspace }}
           RECIPE: (elisp-package-template :fetcher github :repo "abidanBrito/elisp-package-template")
           EXIST_OK: true
-          WARN_IS_ERROR: false
+          WARN_IS_ERROR: true
         run: make -C ~/melpazoid
