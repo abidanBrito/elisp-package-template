@@ -50,10 +50,14 @@ Before pushing, your change should pass at least:
 
 #+begin_src sh
   just build
+  just test
+  just checkdoc
+  just check-declare
   just lint
   just relint
-  just test
 #+end_src
+
+=just all= runs all of them in one go, like CI does.
 
 #+begin_quote
 *Note:* the first run installs the lint and test dependencies into a local =.local-elpa/= directory, so a fresh checkout needs nothing but Emacs and =just=.
